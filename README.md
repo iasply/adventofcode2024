@@ -2,7 +2,7 @@
 
 I want to try solving each challenge in different languages I like.
 
-In this repository, you will find implementations (and maybe more in the future) of:
+In this repository, you will find implementations of:
 
 - C
 - C++
