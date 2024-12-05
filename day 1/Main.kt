@@ -33,21 +33,6 @@ fun swap(arr: ArrayList<Int>, i: Int, j: Int) {
     arr[j] = temp
 }
 
-fun distance(lists :Pair<ArrayList<Int>, ArrayList<Int>>):Int{
-    var r =0
-
-    quickSort(lists.first)
-    quickSort(lists.second)
-    var i = 0
-    val max = lists.first.size
-
-    while (i != max){
-        r+=  ((lists.first[i] - lists.second[i])).absoluteValue
-        i++
-    }
-
-    return r
-}
 fun getArr(): Pair<ArrayList<Int>, ArrayList<Int>> {
     val file = File("inputDay1.txt")
     val l1: ArrayList<Int> = ArrayList()
@@ -58,14 +43,59 @@ fun getArr(): Pair<ArrayList<Int>, ArrayList<Int>> {
         l1.add(split[0].toInt())
         l2.add(split[1].toInt())
     }
-
-    return Pair(l1,l2)
+    return Pair(l1, l2)
 }
 
+fun day1Test(lists: Pair<ArrayList<Int>, ArrayList<Int>>): Int {
+    var r = 0
+
+    quickSort(lists.first)
+    quickSort(lists.second)
+    var i = 0
+    val max = lists.first.size
+
+    while (i != max) {
+        r += ((lists.first[i] - lists.second[i])).absoluteValue
+        i++
+    }
+
+    return r
+}
+
+fun day1TestPt2(): Int {
+    val file = File("inputDay1.txt")
+    val l1: ArrayList<Int> = ArrayList()
+    val rightMap = HashMap<Int, Int>()
+    file.forEachLine {
+        val split = it.split("   ")
+        l1.add(split[0].toInt())
+        val keyInt = split[1].toInt()
+        var numberOrDefault = rightMap.getOrDefault(keyInt, 0)
+        numberOrDefault++
+        rightMap[keyInt] = numberOrDefault
+    }
+    var sum = 0
+    l1.forEach {
+        sum += it * rightMap.getOrDefault(it, 0)
+    }
+
+    return sum
+}
+
+// The second iteration is significantly more performant.
+// Amazon Core achieves 34 ms,
+// while the other is approximately 4 ms slower  wtf???
+
 fun main() {
-    var r=0;
-    val timeTaken =measureNanoTime {
-        r =distance(getArr())
+    var r = 0;
+    var timeTaken = measureNanoTime {
+        r = day1Test(getArr())
+    }
+    println("Time taken: ${timeTaken / 1_000_000} ms")
+    println("R: $r")
+
+    timeTaken = measureNanoTime {
+        r = day1TestPt2()
     }
     println("Time taken: ${timeTaken / 1_000_000} ms")
     println("R: $r")
